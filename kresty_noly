@@ -1,0 +1,89 @@
+test_pole = [
+    ['-', '-', '-'],
+    ['-', '-', '-'],
+    ['-', '-', '-']
+]
+
+def print_pole(pole):
+    print("\t0\t1\t2 ")
+    for i in range(0, 3):
+        print(f"{i}", end="")
+        for j in range(0, 3):
+            print(f"\t{pole[i][j]}", end="")
+        print()
+
+
+def read(name):
+    while True:
+        koordinaty = input(f"Ход игрока [ {name} ]. Введите координаты через пробел:").split()
+
+        if len(koordinaty) != 2:
+            print("Неверный ввод")
+            continue
+
+        if not koordinaty[0].isdigit() or not koordinaty[1].isdigit():
+            print("Неверный ввод")
+            continue
+
+
+        x, y = koordinaty
+
+        int_x, int_y = int(x), int(y)
+        if 0 <= int_x <= 2 and 0 <= int_y <= 2 and test_pole[int_x][int_y] == "-":
+            return int_x, int_y
+        else:
+            print("Неправильный ввод. Повторите ввод.")
+
+
+def input_to_pole(pole, name, symbol):
+    x, y = read(name)
+    if pole[x][y] == '-':
+        pole[x][y] = symbol
+
+    else:
+        return False
+
+
+def win():
+    win_set = (((0, 1), (1, 1), (2, 1)), ((0, 0), (1, 0), (2, 0)), ((0, 2), (1, 2), (2, 2)),
+                      ((0, 0), (0, 1), (0, 2)), ((1, 0), (1, 1), (1, 2)), ((2, 0), (2, 1), (2, 2)),
+                      ((0, 0), (1, 1), (2, 2)), ((2, 0), (1, 1), (0, 2)))
+    for hod in win_set:
+        hod_point = []
+        for i in hod:
+            hod_point.append(test_pole[i[0]][i[1]])
+        if hod_point == ["X", "X", "X"]:
+            print(f"Победа {nameX}!!!")
+            return True
+        if hod_point == ["O", "O", "O"]:
+            print(f"Победа {nameO}!!!")
+            return True
+
+    return False
+
+
+nameX = input("Введите имя первого игрока с символом X: ")
+nameO = input("Введите имя второго игрока с символом O: ")
+
+def start_game():
+    popitka = 0
+
+    while test_pole:
+        popitka += 1
+        input_to_pole(test_pole, nameX, "X")
+        print_pole(test_pole)
+        if win():
+            break
+        input_to_pole(test_pole, nameO, "O")
+        print_pole(test_pole)
+        if win():
+            break
+        if popitka == 7:
+            print("Победила ДРУЖБА!")
+            break
+
+
+start_game()
+
+
+
